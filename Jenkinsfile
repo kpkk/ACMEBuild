@@ -1,22 +1,30 @@
-pipeline{
-    agent any
-    stages{
-        stage('fetch code'){
-            steps{
-               git 'https://github.com/kpkk/ACMEBuild.git'
-            }
-        }
-        stage('build'){
-            steps{
-                bat 'mvn clean install'
-            }
-        }
+pipeline {
+  agent any
+  stages {
+    stage('build the code') {
+      steps {
+        echo 'This will fetch the code from git repo'
+        echo 'And build the code'
+      }
     }
-    post{
-        always{
-            emailext body: 'the build status is notified..please check',
-            subject: 'test email', 
-            to: 'kadarla.pradeep4@gmail.com'
-        }
+
+    stage('Run smoke Tests') {
+      steps {
+        echo 'This stage will run the smoke tests'
+      }
     }
+
+    stage('certify the build') {
+      steps {
+        echo 'This is to verify the test results '
+      }
+    }
+
+  }
+  post {
+    always {
+      emailext(body: 'the build status is notified..please check', subject: 'test email', to: 'kadarla.pradeep4@gmail.com')
+    }
+
+  }
 }
